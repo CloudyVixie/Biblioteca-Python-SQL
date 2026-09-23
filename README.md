@@ -72,15 +72,12 @@ Biblioteca-Python-SQL/
 
 ## 📚 Referências
 
+### Documentação e materiais de estudo
+
 * [Documentação Python — sqlite3](https://docs.python.org/3/library/sqlite3.html#tutorial)
 * [Python Academy — Biblioteca os](https://pythonacademy.com.br/blog/a-biblioteca-os-do-python)
 * [W3Schools — Python os](https://www.w3schools.com/python/ref_module_os.asp)
 * [W3Schools — Python Lists](https://www.w3schools.com/python/python_lists.asp)
 * [W3Schools — SQL](https://www.w3schools.com/sql/default.asp)
 * [Documentação InquirerPy](https://inquirerpy.readthedocs.io/en/latest/)
-
----
-
-### 📚 Projeto de estudo
-
-Desenvolvido por **Vixie**.
+* [Vídeo utilizado como apoio aos estudos — YouTube](https://www.youtube.com/watch?v=9W2JlNgqLd4)

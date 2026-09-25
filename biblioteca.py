@@ -20,8 +20,6 @@ cursor = conexao.cursor()
 
 # tabela livros possui id, título, genero, ano e autor
 cursor.execute("create table if not exists livros(id_livro integer primary key, titulo varchar(100), genero varchar(100), ano varchar(4), autor varchar(100) unique)")
-# tabela autor possui id e nome
-cursor.execute("create table if not exists autores(id_autor integer primery key, nome_autor varchar(100) unique)")
 
 # funcões pra aliviar minha cabeça mais pra frente do código
 
@@ -64,7 +62,7 @@ opcoes_iniciais = [
         "type" : "list",
         "name" : "opcoes_iniciais",
         "message" : "O que deseja fazer?",
-        "choices" : ["Adicionar", "Consultar", "Atualizar", "Deletar"]
+        "choices" : ["Adicionar", "Consultar", "Atualizar", "Deletar", "Sair"]
     }
 ]
 
@@ -128,6 +126,9 @@ if resposta_inicial['opcoes_iniciais'] == "Consultar":
         busca = cursor.fetchone()
         print(f'ID: {busca[0]}\nTítulo: {busca[1]}\nGênero: {busca[2]}\nAno: {busca[3]}\nAutor: {busca[4]}')
 
+if resposta_inicial['opcoes_iniciais'] == "Sair":
+    exit()
+
 
 # caso o usuário queira atualizar um registro
 if resposta_inicial['opcoes_iniciais'] == "Atualizar":
@@ -160,14 +161,14 @@ if resposta_inicial['opcoes_iniciais'] == "Atualizar":
     # atualizar ano
     if resposta_atualizar['opcoes_atualizar'] == "Ano":
         atualizar_ano = input("Insira o novo ano: ")
-        cursor.execute("update livro set ano = ? where id_livro = ?", (atualizar_ano, busca[0]))
+        cursor.execute("update livros set ano = ? where id_livro = ?", (atualizar_ano, busca[0]))
         conexao.commit()
         print("Deu certo!")
 
     # atualizar autor
     if resposta_atualizar['opcoes_atualizar'] == "Autor":
         atualizar_autor = input("Insira o novo autor: ")
-        cursor.execute("update livro set ano = ? where id_livro = ?", (atualizar_autor, busca[0]))
+        cursor.execute("update livros set autor = ? where id_livro = ?", (atualizar_autor, busca[0]))
         conexao.commit()
         print("Deu certo!")
 
@@ -183,7 +184,8 @@ if resposta_inicial['opcoes_iniciais'] == "Deletar":
 
 
 
-# essa área vai ser destinada pra tabela de autores. depois que acabar nela, quero fazer algo com join e outros elementos do sql
+
+
 
 
     

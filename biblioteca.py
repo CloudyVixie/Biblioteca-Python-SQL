@@ -7,10 +7,6 @@ import os
 from InquirerPy import prompt
 
 
-# cria conexão com banco e estabelece o cursor, que é por onde são executadas as querrys
-import sqlite3
-import os
-
 # tive que colocar isso porque o arquivo .db estava indo pra raiz do repositório
 pasta = os.path.dirname(__file__)
 conexao = sqlite3.connect(os.path.join(pasta, "biblioteca.db"))
@@ -19,18 +15,22 @@ cursor = conexao.cursor()
 
 
 # tabela livros possui id, título, genero, ano e autor
-cursor.execute("create table if not exists livros(id_livro integer primary key, titulo varchar(100), genero varchar(100), ano varchar(4), autor varchar(100) unique)")
+cursor.execute("create table if not exists livros(id_livro integer primary key, titulo varchar(100), genero varchar(100), ano varchar(4), autor varchar(100))")
 
 # funcões pra aliviar minha cabeça mais pra frente do código
 
 # insere o livro com o código em sql que eu quero. nada demais, é bem banal na real
 def inserir_livro(titulo, genero, ano, autor):
-    cursor.execute("insert into livros (titulo, genero, ano, autor) values (?, ?, ?, ?)", (titulo, genero, ano, autor))
+    cursor.execute("insert into livros (titulo, genero, ano, autor) values (?, ?, ?, ?)", (titulo.strip().title(), genero.strip().title(), ano, autor.strip().title()))
     conexao.commit()
 
 # é um simples select, só que um detalhe importante que me fez quebrar a cabeça no início foi que a lista tem os índices dela. tipo, numa lista (peixe, gato, cavalo, tigre), o peixe seria o lista[0], e o tigre seria o lista[3]. se as informações do livro são guardadas em lista, é só usar a mesma lógica
 def exibir_livros():
-    for livro in cursor.execute("select * from livros"):
+    livros = cursor.execute("select * from livros").fetchall()
+    if not livros:
+        print("Não há livros cadastrados")
+        return
+    for livro in livros:
         print(f'ID: {livro[0]}\nTítulo: {livro[1]}\nGênero: {livro[2]}\nAno: {livro[3]}\nAutor: {livro[4]}\n')
 
 # aqui foi simples também. o índice só está ali pra não exibir aquela coisa feia de ('nome'). com o índice, só pega a informação da lista que eu quero. ela sai limpa
@@ -41,14 +41,21 @@ def exibir_determinado_livro():
     # usei return aqui porque queria a informação pro código mais abaixo
     return lista_titulos
 
+def consultar_por_autor():
+    lista_autores = []
+    for autor in cursor.execute("select autor from livros order by autor"):
+        lista_autores.append(autor[0])
+    return list(dict.fromkeys(lista_autores))
 
 
 # o OS que importei só pra limpar o código no começo de tudo
 os.system("cls")
 
 
-lista_titulos = exibir_determinado_livro()
 
+
+exibir_lista_autores = consultar_por_autor()
+lista_titulos = exibir_determinado_livro()
 
 
 
@@ -72,7 +79,7 @@ opcoes_consultar = [
         "type" : "list",
         "name" : "opcoes_consultar",
         "message" : "O que deseja exibir?",
-        "choices" : ["Registro específico", "Todos os registros"]
+        "choices" : ["Registro específico", "Todos os registros", "Por autor"]
     }
 ]
 
@@ -82,6 +89,15 @@ todos_livros = [
         "name" : "Todos os livros",
         "message" : "Selecione o livro desejado",
         "choices" : lista_titulos
+    }
+]
+
+todos_autores = [
+    {
+        "type" : "list",
+        "name" : "Por autor",
+        "message" : "Deseja buscar qual autor?",
+        "choices" : exibir_lista_autores
     }
 ]
 
@@ -98,6 +114,14 @@ opcoes_atualizar = [
 
 
 
+
+
+
+
+
+
+# ADICIONAR
+
 # aqui eu chamo o primeiro painel, que são as opções iniciais
 resposta_inicial = prompt(opcoes_iniciais)
 
@@ -108,6 +132,12 @@ if resposta_inicial['opcoes_iniciais'] == 'Adicionar':
     ano = input("Ano: ")
     autor = input("Autor: ")
     inserir_livro(titulo, genero, ano, autor)
+
+
+
+
+
+# CONSULTAR
 
 
 # caso o usuário queira consultar os registros, seja um único ou todos de uma vez
@@ -123,11 +153,33 @@ if resposta_inicial['opcoes_iniciais'] == "Consultar":
 
         # genuinamente não entendi o motivo da vírgula em (titulo_escolhido), mas dá erro de parâmetro se eu remover
         cursor.execute("select * from livros where titulo = ?", (titulo_escolhido,))
+
+        
         busca = cursor.fetchone()
         print(f'ID: {busca[0]}\nTítulo: {busca[1]}\nGênero: {busca[2]}\nAno: {busca[3]}\nAutor: {busca[4]}')
 
-if resposta_inicial['opcoes_iniciais'] == "Sair":
-    exit()
+
+
+    if painel_consultar['opcoes_consultar'] == 'Por autor':
+        painel_autores = prompt(todos_autores)
+        autor_escolhido = painel_autores["Por autor"]
+
+        cursor.execute("select * from livros where autor = ?", (autor_escolhido,))
+        busca = cursor.fetchall()
+
+        if busca:
+            for livro in busca:
+                print(f'ID: {livro[0]}\nTítulo: {livro[1]}\nGênero: {livro[2]}\nAno: {livro[3]}\nAutor: {livro[4]}\n')
+        else:
+            print("Autor não possui livros cadastrados!")
+            
+
+
+
+
+
+
+# ATUALIZAR
 
 
 # caso o usuário queira atualizar um registro
@@ -139,21 +191,26 @@ if resposta_inicial['opcoes_iniciais'] == "Atualizar":
     titulo_escolhido = registros_especificos["Todos os livros"]
     cursor.execute("select * from livros where titulo = ?", (titulo_escolhido,))
     busca = cursor.fetchone()
-    print(f'ID: {busca[0]}\nTítulo: {busca[1]}\nGênero: {busca[2]}\nAno: {busca[3]}\nAutor: {busca[4]}')
-    
+
+    if busca is None:
+        print("Nenhum livro encontrado")
+    else: 
+        print(f'ID: {busca[0]}\nTítulo: {busca[1]}\nGênero: {busca[2]}\nAno: {busca[3]}\nAutor: {busca[4]}')
+
+
     # exibe o prompt de novo, mas dessa vez, aqui o usuário seleciona o que ele quer atualizar
     resposta_atualizar = prompt(opcoes_atualizar)
 
     #  se o usuário selecionar a aba de título, ele pede o texto pra alterar o título
     if resposta_atualizar['opcoes_atualizar'] == "Título":
-        atualizar_nome = input("Insira o novo título: ")
+        atualizar_nome = input("Insira o novo título: ").strip().title()
         cursor.execute("update livros set titulo = ? where id_livro = ?", (atualizar_nome, busca[0]))
         conexao.commit()
         print("Deu certo!")
 
     # mesma cois do título, só que com gênero e os "if" abaixo vão na mesma proposta
     if resposta_atualizar['opcoes_atualizar'] == "Gênero":
-        atualizar_genero = input("Insira o novo gênero: ")
+        atualizar_genero = input("Insira o novo gênero: ").strip().title()
         cursor.execute("update livros set genero = ? where id_livro = ?", (atualizar_genero, busca[0]))
         conexao.commit()
         print("Deu certo!")
@@ -167,10 +224,17 @@ if resposta_inicial['opcoes_iniciais'] == "Atualizar":
 
     # atualizar autor
     if resposta_atualizar['opcoes_atualizar'] == "Autor":
-        atualizar_autor = input("Insira o novo autor: ")
+        atualizar_autor = input("Insira o novo autor: ").strip().title()
         cursor.execute("update livros set autor = ? where id_livro = ?", (atualizar_autor, busca[0]))
         conexao.commit()
         print("Deu certo!")
+
+
+
+
+
+# DELETAR
+
 
 if resposta_inicial['opcoes_iniciais'] == "Deletar":
 
@@ -184,6 +248,11 @@ if resposta_inicial['opcoes_iniciais'] == "Deletar":
 
 
 
+# SAIR
+
+
+if resposta_inicial['opcoes_iniciais'] == "Sair":
+    exit()
 
 
 

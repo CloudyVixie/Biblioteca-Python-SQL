@@ -1,4 +1,4 @@
-# puxa o baanco pro python
+# puxa o baanco para o python
 import sqlite3
 # coloquei import os porque tenho agonia do terminal sujo a cada execução
 import os

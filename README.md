@@ -1,80 +1,57 @@
-# 📚 Biblioteca-Python-SQL
+# Biblioteca em Python e SQL
 
-Um sistema simples para cadastrar e gerenciar livros usando Python, SQLite e InquirerPy.
+Este projeto é um programa de terminal para cadastrar e consultar livros. Foi feito com Python, SQLite e InquirerPy, que cria menus de seleção no terminal.
 
----
+## O que dá para fazer
 
-## 🛠️ Tecnologias
+- Adicionar livros
+- Consultar todos os registros
+- Buscar um livro pelo título
+- Consultar livros por autor
+- Atualizar informações de um livro
+- Excluir registros
 
-- Python
-- SQLite
-- InquirerPy
+## Como instalar e executar
 
-O projeto usa `sqlite3` e `os`, que já fazem parte do Python.
-
-A única biblioteca externa usada é o InquirerPy.
-
-### Instalação
+É necessário ter Python instalado. Instale a única dependência externa:
 
 ```bash
 pip install InquirerPy
 ```
 
-Para iniciar:
+Depois, execute o programa na pasta do projeto:
 
 ```bash
 python biblioteca.py
 ```
 
----
+## Como o código funciona
 
-## 📌 Funcionalidades
+O `biblioteca.py` usa `sqlite3` para executar comandos SQL e guardar os registros no arquivo local `biblioteca.db`. A biblioteca `os` ajuda a localizar esse arquivo junto ao script, e o InquirerPy apresenta as opções de navegação.
 
-- Adicionar livros
-- Consultar livros
-- Consultar um livro pelo registro
-- Atualizar dados
-- Excluir livros
+A tabela `livros` guarda o identificador, o título, o gênero, o ano e o autor de cada registro.
 
----
-
-## 🗄️ Banco de dados
-
-O SQLite guarda os dados dos livros em um arquivo local.
-
-| Campo | Tipo |
+| Campo | Tipo usado no código |
 | --- | --- |
-| `id_livro` | INTEGER |
-| `titulo` | VARCHAR |
-| `genero` | VARCHAR |
-| `ano` | VARCHAR |
-| `autor` | VARCHAR |
+| `id_livro` | `INTEGER PRIMARY KEY` |
+| `titulo` | `VARCHAR(100)` |
+| `genero` | `VARCHAR(100)` |
+| `ano` | `VARCHAR(4)` |
+| `autor` | `VARCHAR(100)` |
 
----
+## Arquivos
 
-## 📁 Estrutura
+- `biblioteca.py`: menus, consultas e operações com os livros.
+- `biblioteca.db`: banco de dados local, criado ou utilizado pelo programa.
+- `LICENSE`: termos de uso do projeto.
 
-```text
-Biblioteca-Python-SQL/
-├── biblioteca.py
-├── biblioteca.db
-├── LICENSE
-└── README.md
-```
+## Referências
 
----
+- [Documentação do sqlite3](https://docs.python.org/3/library/sqlite3.html#tutorial)
+- [Documentação do InquirerPy](https://inquirerpy.readthedocs.io/en/latest/)
+- [Documentação do SQL no W3Schools](https://www.w3schools.com/sql/default.asp)
+- [Documentação do módulo os no W3Schools](https://www.w3schools.com/python/ref_module_os.asp)
 
-## 📚 Referências
-
-- [Documentação Python — sqlite3](https://docs.python.org/3/library/sqlite3.html#tutorial)
-- [Python Academy — Biblioteca os](https://pythonacademy.com.br/blog/a-biblioteca-os-do-python)
-- [W3Schools — Python os](https://www.w3schools.com/python/ref_module_os.asp)
-- [W3Schools — Python Lists](https://www.w3schools.com/python/python_lists.asp)
-- [W3Schools — SQL](https://www.w3schools.com/sql/default.asp)
-- [Documentação InquirerPy](https://inquirerpy.readthedocs.io/en/latest/)
-
----
-
-## 📄 Licença
+## Licença
 
 Este projeto usa a licença MIT.

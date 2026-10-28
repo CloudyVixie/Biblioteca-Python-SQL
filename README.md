@@ -1,19 +1,19 @@
 # Biblioteca em Python e SQL
 
-Este projeto é um programa de terminal para cadastrar e consultar livros. Foi feito com Python, SQLite e InquirerPy, que cria menus de seleção no terminal.
+Programa de terminal para cadastrar, consultar e editar livros. Fiz o projeto para praticar Python, consultas SQL e operações de CRUD usando SQLite.
 
-## O que dá para fazer
+## Funcionalidades
 
-- Adicionar livros
-- Consultar todos os registros
-- Buscar um livro pelo título
-- Consultar livros por autor
-- Atualizar informações de um livro
-- Excluir registros
+- Cadastrar livros.
+- Consultar todos os registros.
+- Buscar livros pelo título.
+- Consultar livros por autor.
+- Atualizar informações de um livro.
+- Excluir registros.
 
 ## Como instalar e executar
 
-É necessário ter Python instalado. Instale a única dependência externa:
+É necessário ter Python instalado. Instale a dependência usada para criar os menus do terminal:
 
 ```bash
 pip install InquirerPy
@@ -27,9 +27,9 @@ python biblioteca.py
 
 ## Como o código funciona
 
-O `biblioteca.py` usa `sqlite3` para executar comandos SQL e guardar os registros no arquivo local `biblioteca.db`. A biblioteca `os` ajuda a localizar esse arquivo junto ao script, e o InquirerPy apresenta as opções de navegação.
+O arquivo `biblioteca.py` usa `sqlite3` para executar comandos SQL e guardar os registros no banco local `biblioteca.db`. O módulo `os` ajuda a localizar o banco junto ao script, e o InquirerPy apresenta as opções de navegação no terminal.
 
-A tabela `livros` guarda o identificador, o título, o gênero, o ano e o autor de cada registro.
+A tabela `livros` guarda o identificador, título, gênero, ano e autor.
 
 | Campo | Tipo usado no código |
 | --- | --- |
@@ -42,16 +42,16 @@ A tabela `livros` guarda o identificador, o título, o gênero, o ano e o autor 
 ## Arquivos
 
 - `biblioteca.py`: menus, consultas e operações com os livros.
-- `biblioteca.db`: banco de dados local, criado ou utilizado pelo programa.
-- `LICENSE`: termos de uso do projeto.
+- `biblioteca.db`: banco SQLite utilizado pelo programa.
+- `LICENSE`: licença do projeto.
 
 ## Referências
 
 - [Documentação do sqlite3](https://docs.python.org/3/library/sqlite3.html#tutorial)
 - [Documentação do InquirerPy](https://inquirerpy.readthedocs.io/en/latest/)
-- [Documentação do SQL no W3Schools](https://www.w3schools.com/sql/default.asp)
-- [Documentação do módulo os no W3Schools](https://www.w3schools.com/python/ref_module_os.asp)
+- [Tutorial de SQL do W3Schools](https://www.w3schools.com/sql/default.asp)
+- [Documentação do módulo os](https://docs.python.org/3/library/os.html)
 
 ## Licença
 
-Este projeto usa a licença MIT.
+Este projeto está sob a licença MIT.
